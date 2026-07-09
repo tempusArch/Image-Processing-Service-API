@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "Hash": "qpjBWrF4ZW8B711zPNEB37yhN2el9dQYVK62L9gFaDI=",
+  "Source": "ImageProcessingServiceAPI",
+  "BasePath": "_content/ImageProcessingServiceAPI",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": []
+}
