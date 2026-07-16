@@ -33,7 +33,7 @@ public class ImageController : ControllerBase {
         var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
         if (string.IsNullOrEmpty(userId))
-            throw new Exception("User ID claim missing");
+            return Unauthorized("User ID claim is missing");
 
         if (file == null || file.Length == 0)
             return BadRequest("The uploaded file is empty");
@@ -56,7 +56,7 @@ public class ImageController : ControllerBase {
         var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
         if (string.IsNullOrEmpty(userId))
-            throw new Exception("User ID claim missing");
+            return Unauthorized("User ID claim is missing");
 
         var theOne = await _context.JobTable
             .AsNoTracking()
@@ -76,7 +76,7 @@ public class ImageController : ControllerBase {
         var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
         if (string.IsNullOrEmpty(userId))
-            throw new Exception("User ID claim missing");
+            return Unauthorized("User ID claim is missing");
 
         string resultName = $"resize-{width}-{height}-{imageId}";
 
@@ -103,7 +103,7 @@ public class ImageController : ControllerBase {
         var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
         if (string.IsNullOrEmpty(userId))
-            throw new Exception("User ID claim missing");
+            return Unauthorized("User ID claim is missing");
 
         string resultName = $"crop-{width}-{height}-{imageId}";
 
@@ -132,7 +132,7 @@ public class ImageController : ControllerBase {
         var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
         if (string.IsNullOrEmpty(userId))
-            throw new Exception("User ID claim missing");
+            return Unauthorized("User ID claim is missing");
 
         string resultName = $"rotate-{degree}-{imageId}";
 
@@ -158,7 +158,7 @@ public class ImageController : ControllerBase {
         var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
         if (string.IsNullOrEmpty(userId))
-            throw new Exception("User ID claim missing");
+            return Unauthorized("User ID claim is missing");
 
         string resultName = $"watermark-{x}-{y}-{size}-{imageId}";
 
@@ -187,7 +187,7 @@ public class ImageController : ControllerBase {
         var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
         if (string.IsNullOrEmpty(userId))
-            throw new Exception("User ID claim missing");
+            return Unauthorized("User ID claim is missing");
 
         string resultName = $"flip-{flipMode}-{imageId}";
 
@@ -213,7 +213,7 @@ public class ImageController : ControllerBase {
         var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
         if (string.IsNullOrEmpty(userId))
-            throw new Exception("User ID claim missing");
+            return Unauthorized("User ID claim is missing");
 
         string resultName = $"mirror-{imageId}";
 
@@ -238,7 +238,7 @@ public class ImageController : ControllerBase {
         var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
         if (string.IsNullOrEmpty(userId))
-            throw new Exception("User ID claim missing");
+            return Unauthorized("User ID claim is missing");
 
         if (quality < 1 || quality > 100)
             return BadRequest("Quality should be between 1 and 100");
@@ -267,7 +267,7 @@ public class ImageController : ControllerBase {
         var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
         if (string.IsNullOrEmpty(userId))
-            throw new Exception("User ID claim missing");
+            return Unauthorized("User ID claim is missing");
 
         if (quality < 1 || quality > 100)
             return BadRequest("Quality should be between 1 and 100");
@@ -298,7 +298,7 @@ public class ImageController : ControllerBase {
         var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
         if (string.IsNullOrEmpty(userId))
-            throw new Exception("User ID claim missing");
+            return Unauthorized("User ID claim is missing");
 
         string resultName = $"filter-{imageFilter}-{imageId}";
 
