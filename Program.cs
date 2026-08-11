@@ -42,8 +42,8 @@ builder.Services.AddScoped<LocalStorageService>();
 builder.Services.AddSingleton<IRabbitMqConnection, RabbitMqConnection>();
 builder.Services.AddSingleton<RabbitMqPublisher>();
 
-builder.Services.AddSingleton<PasswordHasher>();
-builder.Services.AddSingleton<JwtService>();
+builder.Services.AddTransient<PasswordHasher>();
+builder.Services.AddTransient<JwtService>();
 
 builder.Services.AddSingleton<IConnectionMultiplexer>(sp =>
 {
