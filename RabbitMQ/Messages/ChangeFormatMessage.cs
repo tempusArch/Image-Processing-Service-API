@@ -1,6 +1,6 @@
 using ImageProcessingServiceAPI.Domain;
 
-namespace ImageProcessingServiceApi.Application;
+namespace ImageProcessingServiceAPI.Application;
 
 public class ChangeFormatMessage {
     public string UserId {get; set;}

@@ -1,6 +1,6 @@
 using SixLabors.ImageSharp.Processing;
 
-namespace ImageProcessingServiceApi.Application;
+namespace ImageProcessingServiceAPI.Application;
 
 public class MirrorMessage {
     public string UserId {get; set;}

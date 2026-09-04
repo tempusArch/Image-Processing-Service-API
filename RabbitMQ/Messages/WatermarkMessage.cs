@@ -1,4 +1,4 @@
-namespace ImageProcessingServiceApi.Application;
+namespace ImageProcessingServiceAPI.Application;
 
 public class WatermarkMessage {
     public string UserId {get; set;}

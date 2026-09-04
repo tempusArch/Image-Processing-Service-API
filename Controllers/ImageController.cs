@@ -1,16 +1,14 @@
-using ImageProcessingServiceApi.Domain;
-using ImageProcessingServiceApi.Infrastructure;
-using ImageProcessingServiceApi.Application;
+using ImageProcessingServiceAPI.Domain;
+using ImageProcessingServiceAPI.Infrastructure;
+using ImageProcessingServiceAPI.Application;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 using SixLabors.ImageSharp.Processing;
 using StackExchange.Redis;
-using ImageProcessingServiceAPI.Domain;
 
-
-namespace ImageProcessingServiceApi.Controllers;
+namespace ImageProcessingServiceAPI.Controllers;
 
 [ApiController]
 [Route("[controller]")]

@@ -1,4 +1,4 @@
-namespace ImageProcessingServiceApi.Application;
+namespace ImageProcessingServiceAPI.Application;
 
 public class ResizeMessage {
     public string UserId {get; set;}

@@ -1,6 +1,6 @@
 using System;
 
-namespace ImageProcessingServiceApi.Infrastructure;
+namespace ImageProcessingServiceAPI.Infrastructure;
 
 public class ForbiddenException : Exception {
     public ForbiddenException(string message) : base(message) {

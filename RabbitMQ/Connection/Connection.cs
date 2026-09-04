@@ -1,6 +1,6 @@
 using RabbitMQ.Client;
 
-namespace ImageProcessingServiceApi.Application;
+namespace ImageProcessingServiceAPI.Application;
 
 public interface IRabbitMqConnection : IAsyncDisposable {
     Task<IConnection> GetConnectionAsync();

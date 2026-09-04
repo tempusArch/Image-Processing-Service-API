@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace ImageProcessingServiceApi.Application;
+namespace ImageProcessingServiceAPI.Application;
 
 public class LoginUserDto {
     [Required]

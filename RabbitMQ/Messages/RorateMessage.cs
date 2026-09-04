@@ -1,4 +1,4 @@
-namespace ImageProcessingServiceApi.Application;
+namespace ImageProcessingServiceAPI.Application;
 
 public class RotateMessage {
     public string UserId {get; set;}

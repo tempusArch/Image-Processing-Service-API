@@ -1,7 +1,7 @@
-using ImageProcessingServiceApi.Domain;
-using ImageProcessingServiceApi.Infrastructure;
+using ImageProcessingServiceAPI.Domain;
+using ImageProcessingServiceAPI.Infrastructure;
 
-namespace ImageProcessingServiceApi.Application;
+namespace ImageProcessingServiceAPI.Application;
 
 public class LocalStorageService {
     private static string basePath = Directory.GetCurrentDirectory() + @"\Data";

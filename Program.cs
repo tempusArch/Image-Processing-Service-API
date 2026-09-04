@@ -1,7 +1,7 @@
-using ImageProcessingServiceApi.Application;
-using ImageProcessingServiceApi.Controllers;
-using ImageProcessingServiceApi.Domain;
-using ImageProcessingServiceApi.Infrastructure;
+using ImageProcessingServiceAPI.Application;
+using ImageProcessingServiceAPI.Controllers;
+using ImageProcessingServiceAPI.Domain;
+using ImageProcessingServiceAPI.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
@@ -34,16 +34,19 @@ builder.Services.AddControllers()
 builder.Services.AddDbContext<ImageProcessingServiceApiDbContext>(options => 
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+builder.Services.AddHttpContextAccessor();
+
 builder.Services.AddScoped<UserService>();
 builder.Services.AddScoped<ImageService>();
 builder.Services.AddScoped<LocalStorageService>();
+builder.Services.AddScoped<HttpContextService>();
 
 
 builder.Services.AddSingleton<IRabbitMqConnection, RabbitMqConnection>();
 builder.Services.AddSingleton<RabbitMqPublisher>();
 
-builder.Services.AddSingleton<PasswordHasher>();
-builder.Services.AddSingleton<JwtService>();
+builder.Services.AddTransient<PasswordHasher>();
+builder.Services.AddTransient<JwtService>();
 
 builder.Services.AddSingleton<IConnectionMultiplexer>(sp =>
 {

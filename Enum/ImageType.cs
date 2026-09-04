@@ -1,4 +1,4 @@
-namespace ImageProcessingServiceApi.Domain;
+namespace ImageProcessingServiceAPI.Domain;
 
 public enum ImageType {
     jpg,

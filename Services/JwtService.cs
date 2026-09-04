@@ -1,4 +1,4 @@
-using ImageProcessingServiceApi.Domain;
+using ImageProcessingServiceAPI.Domain;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Cryptography;
@@ -6,7 +6,7 @@ using System.Security.Claims;
 using System.Text;
 
 
-namespace ImageProcessingServiceApi.Infrastructure;
+namespace ImageProcessingServiceAPI.Infrastructure;
 
 public class JwtService {
     private readonly IConfiguration _config;

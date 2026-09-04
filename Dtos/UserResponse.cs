@@ -1,4 +1,4 @@
-namespace ImageProcessingServiceApi.Application;
+namespace ImageProcessingServiceAPI.Application;
 
 public class UserResponse {
     public string Name {get; set;}

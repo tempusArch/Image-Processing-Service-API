@@ -1,7 +1,7 @@
-using ImageProcessingServiceApi.Domain;
+using ImageProcessingServiceAPI.Domain;
 using Microsoft.EntityFrameworkCore;
 
-namespace ImageProcessingServiceApi.Infrastructure;
+namespace ImageProcessingServiceAPI.Infrastructure;
 
 public class ImageProcessingServiceApiDbContext : DbContext {
     public ImageProcessingServiceApiDbContext(DbContextOptions<ImageProcessingServiceApiDbContext> options) : base(options) {

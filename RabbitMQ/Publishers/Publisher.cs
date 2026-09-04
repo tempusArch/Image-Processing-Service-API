@@ -3,29 +3,19 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using RabbitMQ.Client;
 
-namespace ImageProcessingServiceApi.Application;
+namespace ImageProcessingServiceAPI.Application;
 
 public class RabbitMqPublisher {
     private readonly IConfiguration _config;
     private readonly IRabbitMqConnection _rabbitConnection;
-    private IChannel? _channel;
     public RabbitMqPublisher(IConfiguration configuration, IRabbitMqConnection rabbitMqConnection) {
         _config = configuration;
         _rabbitConnection = rabbitMqConnection;
     }
 
-    public async Task<IChannel> GetChannelAsync() {
-        if (_channel?.IsOpen == true)
-            return _channel;
-
-        var connection = await _rabbitConnection.GetConnectionAsync();
-        _channel = await connection.CreateChannelAsync();
-
-        return _channel;
-    }
-
     public async Task ResizePublishAsync(ResizeMessage message) {
-        await using var channel = await GetChannelAsync();
+        var connection = await _rabbitConnection.GetConnectionAsync();
+        await using var channel = await connection.CreateChannelAsync();
 
         await channel.ExchangeDeclareAsync(
             exchange: _config["RabbitMQ:Exchange"],
@@ -48,7 +38,8 @@ public class RabbitMqPublisher {
     }
 
     public async Task CropPublishAsync(CropMessage message) {
-        await using var channel = await GetChannelAsync();
+        var connection = await _rabbitConnection.GetConnectionAsync();
+        await using var channel = await connection.CreateChannelAsync();
 
         await channel.ExchangeDeclareAsync(
             exchange: _config["RabbitMQ:Exchange"],
@@ -71,7 +62,8 @@ public class RabbitMqPublisher {
     }
 
     public async Task RotatePublishAsync(RotateMessage message) {
-        await using var channel = await GetChannelAsync();
+        var connection = await _rabbitConnection.GetConnectionAsync();
+        await using var channel = await connection.CreateChannelAsync();
 
         await channel.ExchangeDeclareAsync(
             exchange: _config["RabbitMQ:Exchange"],
@@ -94,7 +86,8 @@ public class RabbitMqPublisher {
     }
 
     public async Task WatermarkPublishAsync(WatermarkMessage message) {
-        await using var channel = await GetChannelAsync();
+        var connection = await _rabbitConnection.GetConnectionAsync();
+        await using var channel = await connection.CreateChannelAsync();
 
         await channel.ExchangeDeclareAsync(
             exchange: _config["RabbitMQ:Exchange"],
@@ -117,7 +110,8 @@ public class RabbitMqPublisher {
     }
 
     public async Task FlipPublishAsync(FlipMessage message) {
-        await using var channel = await GetChannelAsync();
+        var connection = await _rabbitConnection.GetConnectionAsync();
+        await using var channel = await connection.CreateChannelAsync();
 
         await channel.ExchangeDeclareAsync(
             exchange: _config["RabbitMQ:Exchange"],
@@ -140,7 +134,8 @@ public class RabbitMqPublisher {
     }
 
     public async Task MirrorPublishAsync(MirrorMessage message) {
-        await using var channel = await GetChannelAsync();
+        var connection = await _rabbitConnection.GetConnectionAsync();
+        await using var channel = await connection.CreateChannelAsync();
 
         await channel.ExchangeDeclareAsync(
             exchange: _config["RabbitMQ:Exchange"],
@@ -163,7 +158,8 @@ public class RabbitMqPublisher {
     }
 
     public async Task CompressPublishAsync(CompressMessage message) {
-        await using var channel = await GetChannelAsync();
+        var connection = await _rabbitConnection.GetConnectionAsync();
+        await using var channel = await connection.CreateChannelAsync();
 
         await channel.ExchangeDeclareAsync(
             exchange: _config["RabbitMQ:Exchange"],
@@ -186,7 +182,8 @@ public class RabbitMqPublisher {
     }
 
     public async Task ChangeFormatPublishAsync(ChangeFormatMessage message) {
-        await using var channel = await GetChannelAsync();
+        var connection = await _rabbitConnection.GetConnectionAsync();
+        await using var channel = await connection.CreateChannelAsync();
 
         await channel.ExchangeDeclareAsync(
             exchange: _config["RabbitMQ:Exchange"],
@@ -209,7 +206,8 @@ public class RabbitMqPublisher {
     }
 
     public async Task FilterPublishAsync(FilterMessage message) {
-        await using var channel = await GetChannelAsync();
+        var connection = await _rabbitConnection.GetConnectionAsync();
+        await using var channel = await connection.CreateChannelAsync();
 
         await channel.ExchangeDeclareAsync(
             exchange: _config["RabbitMQ:Exchange"],

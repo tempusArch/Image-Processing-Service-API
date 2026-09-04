@@ -1,4 +1,4 @@
-namespace ImageProcessingServiceApi.Application;
+namespace ImageProcessingServiceAPI.Application;
 
 public class ImageValidationResult {
     public required MemoryStream Content {get; init;}

@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
-using ImageProcessingServiceApi.Domain;
-using ImageProcessingServiceApi.Infrastructure;
+using ImageProcessingServiceAPI.Domain;
+using ImageProcessingServiceAPI.Infrastructure;
 using StackExchange.Redis;
 using SixLabors.ImageSharp;
 using SixLabors.Fonts;
@@ -11,10 +11,8 @@ using Microsoft.Extensions.WebEncoders;
 using SixLabors.ImageSharp.Formats.Webp;
 using SixLabors.ImageSharp.Formats.Jpeg;
 using SixLabors.ImageSharp.Drawing.Processing;
-using ImageProcessingServiceAPI.Domain;
 
-
-namespace ImageProcessingServiceApi.Application;
+namespace ImageProcessingServiceAPI.Application;
 
 public class ImageService {
     private const long maxSize = 15 * 1024 * 1024;

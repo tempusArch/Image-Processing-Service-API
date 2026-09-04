@@ -1,26 +1,23 @@
-using ImageProcessingServiceApi.Domain;
-using ImageProcessingServiceApi.Infrastructure;
-using ImageProcessingServiceApi.Application;
+using ImageProcessingServiceAPI.Domain;
+using ImageProcessingServiceAPI.Infrastructure;
+using ImageProcessingServiceAPI.Application;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 
-namespace ImageProcessingServiceApi.Controllers;
+namespace ImageProcessingServiceAPI.Controllers;
 
 
 [ApiController]
 [Route("[controller]")]
 public class UserController : ControllerBase {
     private readonly UserService _userService;
-    private readonly JwtService _jwtService;
-    private readonly PasswordHasher _passwordHasher;
-    private readonly ImageProcessingServiceApiDbContext _context;
-    public UserController(UserService userService, JwtService jwtService, PasswordHasher passwordHasher, ImageProcessingServiceApiDbContext context) {
+    private readonly HttpContextService _httpContextService;
+
+    public UserController(UserService userService, HttpContextService httpContextService) {
         _userService = userService;
-        _jwtService = jwtService;
-        _passwordHasher = passwordHasher;
-        _context = context;
+        _httpContextService = httpContextService;
     }
 
     [HttpPost("register")]
@@ -33,84 +30,28 @@ public class UserController : ControllerBase {
 
     [HttpPost("login")]
     [AllowAnonymous]
-    public async Task<IActionResult> LoginUser(LoginUserDto dto) {
-        var theUser = await _context.UserTable
-            .SingleOrDefaultAsync(x => x.Email == dto.Email);
-
-        if (theUser == null || !_passwordHasher.VerifyPassword(dto.Password, theUser.PasswordHashed)) 
-            return Unauthorized();
-        
-        var accessToken = _jwtService.Generate_JWT(theUser);
-        var refreshToken = _jwtService.Generate_RefreshToken(theUser.Id.ToString());
-
-        _context.RefreshTokenTable.Add(refreshToken);
-        await _context.SaveChangesAsync();
-
-        Response.Cookies.Append("RefreshToken", refreshToken.Token, new CookieOptions {
-            HttpOnly = true,
-            Secure = true,
-            SameSite = SameSiteMode.Strict,
-            Expires = refreshToken.ExpiresAt
-        });
+    public async Task<IActionResult> LoginUser(LoginUserDto dto, CancellationToken cancellationToken) { 
+        var accessToken = await _userService.LoginUser(dto, cancellationToken);
 
         return Ok(new {Token = accessToken});
-    
     }
 
     [HttpPost("refresh")]
-    public async Task<IActionResult> Refresh() {
-        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+    public async Task<IActionResult> Refresh(CancellationToken cancellationToken) {
+        _httpContextService.CheckUserIdClaim();
 
-        if (string.IsNullOrEmpty(userId))
-            return Unauthorized("User ID claim is missing");
-
-        var valueOfRefreshToken = Request.Cookies["RefreshToken"];
-
-        if (string.IsNullOrEmpty(valueOfRefreshToken))
-            return Unauthorized();
-
-        var kyuuRefreshToken = await _context.RefreshTokenTable.SingleOrDefaultAsync(n => n.Token == valueOfRefreshToken);
-
-        if (kyuuRefreshToken == null || !kyuuRefreshToken.IsActive)
-            return Unauthorized();
-
-        kyuuRefreshToken.RevokedAt = DateTime.UtcNow;
-
-        var newRefreshToken = _jwtService.Generate_RefreshToken(kyuuRefreshToken.UserId);
-        _context.RefreshTokenTable.Add(newRefreshToken);
-        await _context.SaveChangesAsync();
-
-        var um = await _context.UserTable.SingleOrDefaultAsync(n => n.Id == int.Parse(kyuuRefreshToken.UserId));
-        var newAccessToken = _jwtService.Generate_JWT(um);
-
-        Response.Cookies.Append("RefreshToken", newRefreshToken.Token, new CookieOptions {
-            HttpOnly = true,
-            Secure = true,
-            SameSite = SameSiteMode.Strict,
-            Expires = newRefreshToken.ExpiresAt
-        });
+        var newAccessToken = await _userService.RefreshUser(cancellationToken);
 
         return Ok(new { Token = newAccessToken });
     }
 
     [HttpPost("logout")]
-    public async Task<IActionResult> Logout() {
-        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+    public async Task<IActionResult> Logout(CancellationToken cancellationToken) {
+        _httpContextService.CheckUserIdClaim();
 
-        if (string.IsNullOrEmpty(userId))
-            return Unauthorized("User ID claim is missing");
-
-        var valueOfRefreshToken = Request.Cookies["RefreshToken"];
-
-        if (!string.IsNullOrEmpty(valueOfRefreshToken)) {
-            var kyuuRefreshToken = await _context.RefreshTokenTable.SingleOrDefaultAsync(n => n.Token == valueOfRefreshToken);
-            if (kyuuRefreshToken != null) {
-                kyuuRefreshToken.RevokedAt = DateTime.UtcNow;
-                await _context.SaveChangesAsync();
-            }
-        }
-
-        Response.Cookies.Delete("RefreshToken");
+        await _userService.LogoutUser(cancellationToken);
+        
         return NoContent();
     }
+    
 }

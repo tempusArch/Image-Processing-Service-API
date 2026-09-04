@@ -1,6 +1,6 @@
-using ImageProcessingServiceApi.Domain;
+using ImageProcessingServiceAPI.Domain;
 
-namespace ImageProcessingServiceApi.Application;
+namespace ImageProcessingServiceAPI.Application;
 
 public class FilterMessage {
     public string UserId {get; set;}

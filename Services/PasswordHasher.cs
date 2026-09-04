@@ -1,4 +1,4 @@
-namespace ImageProcessingServiceApi.Infrastructure;
+namespace ImageProcessingServiceAPI.Infrastructure;
 
 public class PasswordHasher {
     public string HashPassword(string m) {

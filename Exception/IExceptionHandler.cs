@@ -2,7 +2,7 @@ using System;
 using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Diagnostics;
 
-namespace ImageProcessingServiceApi.Infrastructure;
+namespace ImageProcessingServiceAPI.Infrastructure;
 
 public class NotFoundExceptionHandler : IExceptionHandler {
     public async ValueTask<bool> TryHandleAsync(HttpContext context, Exception exception, CancellationToken cancellationToken) {
