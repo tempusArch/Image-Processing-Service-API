@@ -8,11 +8,11 @@
 - SQL Server
 - RabbitMQ
 - Redis
-- Six Labors
+- SixLabors.ImageSharp
 
 ## Features
 - JWT User Authentication and Authorization
-- Use Six Labors for Image Process including:<br>
+- Use ImageSharp for Image Process including:<br>
   Resize, Crop, Rotate, Watermark, Flip, Mirror, Compress,<br>
   Change foramt (JPEG, PNG, etc), Apply filters (grayscale, sepia)
 - Redis caching transformed images to improve performance
