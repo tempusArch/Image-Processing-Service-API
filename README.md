@@ -1,4 +1,4 @@
-# Image_Processing_Service_API
+# Image-Processing-Service-API
 
 ## Tech Stack
 - C#
