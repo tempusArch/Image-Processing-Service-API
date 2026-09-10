@@ -3,7 +3,7 @@
 ## Tech Stack
 - C#
 - .NET 8
-- ASP.NET Core
+- ASP.NET Core Web API
 - EF Core
 - SQL Server
 - RabbitMQ
