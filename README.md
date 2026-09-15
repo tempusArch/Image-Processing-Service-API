@@ -1,9 +1,9 @@
-# Image_Processing_Service_API
+# Image-Processing-Service-API
 
 ## Tech Stack
 - C#
 - .NET 8
-- ASP.NET Core
+- ASP.NET Core Web API
 - EF Core
 - SQL Server
 - RabbitMQ
