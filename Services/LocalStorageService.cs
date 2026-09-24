@@ -4,7 +4,7 @@ using ImageProcessingServiceAPI.Infrastructure;
 namespace ImageProcessingServiceAPI.Application;
 
 public class LocalStorageService {
-    private static string basePath = Directory.GetCurrentDirectory() + @"\Data";
+    private static string basePath = Path.GetFullPath(Directory.GetCurrentDirectory() + @"\Data") + Path.DirectorySeparatorChar;
     private readonly ImageProcessingServiceApiDbContext _context;
 
     public LocalStorageService(ImageProcessingServiceApiDbContext context) {
@@ -51,7 +51,7 @@ public class LocalStorageService {
     }
 
     private string CombinePath(string relativePath) {
-        basePath = Path.GetFullPath(basePath).TrimEnd(Path.DirectorySeparatorChar) + Path.DirectorySeparatorChar;
+        //basePath = Path.GetFullPath(basePath).TrimEnd(Path.DirectorySeparatorChar) + Path.DirectorySeparatorChar;
         var combined = Path.GetFullPath(Path.Combine(basePath, relativePath));
 
         if (!combined.StartsWith(basePath, StringComparison.OrdinalIgnoreCase))

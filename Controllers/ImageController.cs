@@ -40,12 +40,12 @@ public class ImageController : ControllerBase {
             return BadRequest("the uploaded file exceeds 15 MB size limit");
 
         using var stream = file.OpenReadStream();
-        var validated = await _imageService.ValidateUpload(stream, cancellationToken);
+        var imageId = await _imageService.ValidateUpload(stream, cancellationToken);
 
-        string relativePath = @$"{userId}/{validated}";
+        string relativePath = @$"{userId}/{imageId}";
         await _localStorageService.UploadToLocalStorage(relativePath, stream, cancellationToken);
 
-        return Created(string.Empty, validated);
+        return Created(string.Empty, imageId);
 
     }
 
