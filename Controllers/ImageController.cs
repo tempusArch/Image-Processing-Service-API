@@ -76,6 +76,9 @@ public class ImageController : ControllerBase {
         if (string.IsNullOrEmpty(userId))
             return Unauthorized("User ID claim is missing");
 
+        if (width < 0 || height < 0)
+            return BadRequest("Width or height must be greater than 0");
+
         string resultName = $"resize-{width}-{height}-{imageId}";
 
         if (_redisDB.KeyExists(resultName)) {
@@ -103,7 +106,10 @@ public class ImageController : ControllerBase {
         if (string.IsNullOrEmpty(userId))
             return Unauthorized("User ID claim is missing");
 
-        string resultName = $"crop-{width}-{height}-{imageId}";
+        if (x < 0 || y < 0 || width < 0 || height < 0)
+            return BadRequest("Start point, width or height must be greater than 0");
+
+        string resultName = $"crop-{x}-{y}-{width}-{height}-{imageId}";
 
         if (_redisDB.KeyExists(resultName)) {
             var cachedImage = await _redisDB.StringGetAsync(resultName);
@@ -157,6 +163,9 @@ public class ImageController : ControllerBase {
 
         if (string.IsNullOrEmpty(userId))
             return Unauthorized("User ID claim is missing");
+
+        if (x < 0 || y < 0)
+            return BadRequest("Start point must be greater than 0");
 
         string resultName = $"watermark-{x}-{y}-{size}-{imageId}";
 

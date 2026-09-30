@@ -26,30 +26,13 @@ public class RotateWorker : BackgroundService {
             try {
                 var connection = await _rabbitConnection.GetConnectionAsync();
                 await using var channel = await connection.CreateChannelAsync();
-
-                await channel.ExchangeDeclareAsync(
-                    exchange: _config["RabbitMQ:Exchange"],
-                    type: ExchangeType.Topic,
-                    durable: true
-                );
-
-                await channel.QueueDeclareAsync(
-                    queue: "image.rotate.queue",
-                    durable: true,
-                    exclusive: false,
-                    autoDelete: false
-                );
-
-                await channel.QueueBindAsync(
-                    queue: "image.rotate.queue",
-                    exchange: _config["RabbitMQ:Exchange"],
-                    routingKey: "image.rotate"
-                );
-
-                await channel.BasicQosAsync(
-                    prefetchSize: 0,
-                    prefetchCount: 1,
-                    global: false
+                
+                await WorkerBoilerplate.Initialize(
+                    channel, 
+                    _config["RabbitMQ:Exchange"],
+                    _config["RabbitMQ:DeadLetterExchange"],
+                    "image.rotate.queue",
+                    "image.rotate"
                 );
 
                 var consumer = new AsyncEventingBasicConsumer(channel);

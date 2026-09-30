@@ -17,23 +17,18 @@ public class RabbitMqPublisher {
         var connection = await _rabbitConnection.GetConnectionAsync();
         await using var channel = await connection.CreateChannelAsync();
 
-        await channel.ExchangeDeclareAsync(
-            exchange: _config["RabbitMQ:Exchange"],
-            type: ExchangeType.Topic,
-            durable: true
-        );
-
         var body = Encoding.UTF8.GetBytes(JsonSerializer.Serialize(message));
         var props = new BasicProperties {
             Persistent = true
         };
 
-        await channel.BasicPublishAsync(
-            exchange: _config["RabbitMQ:Exchange"],
-            routingKey: "image.resize",
-            mandatory: false,
-            basicProperties: props,
-            body: body
+        await PublisherBoilerplate.Initialize(
+            channel,
+            _config["RabbitMQ:Exchange"],
+            _config["RabbitMQ:DeadLetterExchange"],
+            "image.resize",
+            body,
+            props
         );
     }
 
@@ -41,23 +36,18 @@ public class RabbitMqPublisher {
         var connection = await _rabbitConnection.GetConnectionAsync();
         await using var channel = await connection.CreateChannelAsync();
 
-        await channel.ExchangeDeclareAsync(
-            exchange: _config["RabbitMQ:Exchange"],
-            type: ExchangeType.Topic,
-            durable: true
-        );
-
         var body = Encoding.UTF8.GetBytes(JsonSerializer.Serialize(message));
         var props = new BasicProperties {
             Persistent = true
         };
 
-        await channel.BasicPublishAsync(
-            exchange: _config["RabbitMQ:Exchange"],
-            routingKey: "image.crop",
-            mandatory: false,
-            basicProperties: props,
-            body: body
+        await PublisherBoilerplate.Initialize(
+            channel,
+            _config["RabbitMQ:Exchange"],
+            _config["RabbitMQ:DeadLetterExchange"],
+            "image.crop",
+            body,
+            props
         );
     }
 
@@ -65,23 +55,18 @@ public class RabbitMqPublisher {
         var connection = await _rabbitConnection.GetConnectionAsync();
         await using var channel = await connection.CreateChannelAsync();
 
-        await channel.ExchangeDeclareAsync(
-            exchange: _config["RabbitMQ:Exchange"],
-            type: ExchangeType.Topic,
-            durable: true
-        );
-
         var body = Encoding.UTF8.GetBytes(JsonSerializer.Serialize(message));
         var props = new BasicProperties {
             Persistent = true
         };
 
-        await channel.BasicPublishAsync(
-            exchange: _config["RabbitMQ:Exchange"],
-            routingKey: "image.rotate",
-            mandatory: false,
-            basicProperties: props,
-            body: body
+        await PublisherBoilerplate.Initialize(
+            channel,
+            _config["RabbitMQ:Exchange"],
+            _config["RabbitMQ:DeadLetterExchange"],
+            "image.rotate",
+            body,
+            props
         );
     }
 
@@ -89,23 +74,18 @@ public class RabbitMqPublisher {
         var connection = await _rabbitConnection.GetConnectionAsync();
         await using var channel = await connection.CreateChannelAsync();
 
-        await channel.ExchangeDeclareAsync(
-            exchange: _config["RabbitMQ:Exchange"],
-            type: ExchangeType.Topic,
-            durable: true
-        );
-
         var body = Encoding.UTF8.GetBytes(JsonSerializer.Serialize(message));
         var props = new BasicProperties {
             Persistent = true
         };
 
-        await channel.BasicPublishAsync(
-            exchange: _config["RabbitMQ:Exchange"],
-            routingKey: "image.watermark",
-            mandatory: false,
-            basicProperties: props,
-            body: body
+        await PublisherBoilerplate.Initialize(
+            channel,
+            _config["RabbitMQ:Exchange"],
+            _config["RabbitMQ:DeadLetterExchange"],
+            "image.watermark",
+            body,
+            props
         );
     }
 
@@ -113,23 +93,18 @@ public class RabbitMqPublisher {
         var connection = await _rabbitConnection.GetConnectionAsync();
         await using var channel = await connection.CreateChannelAsync();
 
-        await channel.ExchangeDeclareAsync(
-            exchange: _config["RabbitMQ:Exchange"],
-            type: ExchangeType.Topic,
-            durable: true
-        );
-
         var body = Encoding.UTF8.GetBytes(JsonSerializer.Serialize(message));
         var props = new BasicProperties {
             Persistent = true
         };
 
-        await channel.BasicPublishAsync(
-            exchange: _config["RabbitMQ:Exchange"],
-            routingKey: "image.flip",
-            mandatory: false,
-            basicProperties: props,
-            body: body
+        await PublisherBoilerplate.Initialize(
+            channel,
+            _config["RabbitMQ:Exchange"],
+            _config["RabbitMQ:DeadLetterExchange"],
+            "image.flip",
+            body,
+            props
         );
     }
 
@@ -137,23 +112,17 @@ public class RabbitMqPublisher {
         var connection = await _rabbitConnection.GetConnectionAsync();
         await using var channel = await connection.CreateChannelAsync();
 
-        await channel.ExchangeDeclareAsync(
-            exchange: _config["RabbitMQ:Exchange"],
-            type: ExchangeType.Topic,
-            durable: true
-        );
-
         var body = Encoding.UTF8.GetBytes(JsonSerializer.Serialize(message));
         var props = new BasicProperties {
             Persistent = true
         };
-
-        await channel.BasicPublishAsync(
-            exchange: _config["RabbitMQ:Exchange"],
-            routingKey: "image.mirror",
-            mandatory: false,
-            basicProperties: props,
-            body: body
+        await PublisherBoilerplate.Initialize(
+            channel,
+            _config["RabbitMQ:Exchange"],
+            _config["RabbitMQ:DeadLetterExchange"],
+            "image.mirror",
+            body,
+            props
         );
     }
 
@@ -161,23 +130,17 @@ public class RabbitMqPublisher {
         var connection = await _rabbitConnection.GetConnectionAsync();
         await using var channel = await connection.CreateChannelAsync();
 
-        await channel.ExchangeDeclareAsync(
-            exchange: _config["RabbitMQ:Exchange"],
-            type: ExchangeType.Topic,
-            durable: true
-        );
-
         var body = Encoding.UTF8.GetBytes(JsonSerializer.Serialize(message));
         var props = new BasicProperties {
             Persistent = true
         };
-
-        await channel.BasicPublishAsync(
-            exchange: _config["RabbitMQ:Exchange"],
-            routingKey: "image.compress",
-            mandatory: false,
-            basicProperties: props,
-            body: body
+        await PublisherBoilerplate.Initialize(
+            channel,
+            _config["RabbitMQ:Exchange"],
+            _config["RabbitMQ:DeadLetterExchange"],
+            "image.compress",
+            body,
+            props
         );
     }
 
@@ -185,23 +148,17 @@ public class RabbitMqPublisher {
         var connection = await _rabbitConnection.GetConnectionAsync();
         await using var channel = await connection.CreateChannelAsync();
 
-        await channel.ExchangeDeclareAsync(
-            exchange: _config["RabbitMQ:Exchange"],
-            type: ExchangeType.Topic,
-            durable: true
-        );
-
         var body = Encoding.UTF8.GetBytes(JsonSerializer.Serialize(message));
         var props = new BasicProperties {
             Persistent = true
         };
-
-        await channel.BasicPublishAsync(
-            exchange: _config["RabbitMQ:Exchange"],
-            routingKey: "image.changeformat",
-            mandatory: false,
-            basicProperties: props,
-            body: body
+        await PublisherBoilerplate.Initialize(
+            channel,
+            _config["RabbitMQ:Exchange"],
+            _config["RabbitMQ:DeadLetterExchange"],
+            "image.changeformat",
+            body,
+            props
         );
     }
 
@@ -209,23 +166,17 @@ public class RabbitMqPublisher {
         var connection = await _rabbitConnection.GetConnectionAsync();
         await using var channel = await connection.CreateChannelAsync();
 
-        await channel.ExchangeDeclareAsync(
-            exchange: _config["RabbitMQ:Exchange"],
-            type: ExchangeType.Topic,
-            durable: true
-        );
-
         var body = Encoding.UTF8.GetBytes(JsonSerializer.Serialize(message));
         var props = new BasicProperties {
             Persistent = true
         };
-
-        await channel.BasicPublishAsync(
-            exchange: _config["RabbitMQ:Exchange"],
-            routingKey: "image.filter",
-            mandatory: false,
-            basicProperties: props,
-            body: body
+        await PublisherBoilerplate.Initialize(
+            channel,
+            _config["RabbitMQ:Exchange"],
+            _config["RabbitMQ:DeadLetterExchange"],
+            "image.filter",
+            body,
+            props
         );
     }
 }
