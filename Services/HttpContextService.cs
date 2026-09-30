@@ -22,7 +22,7 @@ public class HttpContextService {
             throw new UnauthorizedAccessException("User ID claim is missing");
     }
 
-    public int GetCurrentUserId() {
+    public int GetCurrentUserIdForLogging() {
         var httpContext = _httpContextAccessor.HttpContext;
 
         if (httpContext == null || httpContext.User == null || !httpContext.User.Claims.Any())
@@ -34,6 +34,15 @@ public class HttpContextService {
             throw new UnauthorizedAccessException("User ID claim is missing");
 
         return int.Parse(claim.Value);
+    }
+
+    public string GetCurrentUserIdAsString() {
+        var userId =_httpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+        if (string.IsNullOrEmpty(userId))
+            throw new UnauthorizedAccessException("User ID claim is missing");
+
+        return userId;
     }
 
     public string? GetRefreshToken() {

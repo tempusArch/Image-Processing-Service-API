@@ -18,20 +18,28 @@ public class ImageController : ControllerBase {
     private readonly ImageProcessingServiceApiDbContext _context;
     private readonly RabbitMqPublisher _publisher;
     private readonly IDatabase _redisDB;
-    public ImageController(ImageService imageService, LocalStorageService localStorageService, ImageProcessingServiceApiDbContext context, RabbitMqPublisher publisher, IConnectionMultiplexer redisConnectionMultiplexer) {
+    private readonly HttpContextService _httpContextService;
+
+    public ImageController(
+        ImageService imageService, 
+        LocalStorageService localStorageService, 
+        ImageProcessingServiceApiDbContext context, 
+        RabbitMqPublisher publisher, 
+        IConnectionMultiplexer redisConnectionMultiplexer, 
+        HttpContextService httpContextService
+    ) {
         _imageService = imageService;
         _localStorageService = localStorageService;
         _context = context;
         _publisher = publisher;
         _redisDB = redisConnectionMultiplexer.GetDatabase();
+        _httpContextService = httpContextService;
+
     }
 
     [HttpPost("upload")]
     public async Task<IActionResult> UploadImage(IFormFile file, CancellationToken cancellationToken) {
-        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-
-        if (string.IsNullOrEmpty(userId))
-            return Unauthorized("User ID claim is missing");
+        var userId = _httpContextService.GetCurrentUserIdAsString();
 
         if (file == null || file.Length == 0)
             return BadRequest("The uploaded file is empty");
@@ -51,10 +59,7 @@ public class ImageController : ControllerBase {
 
     [HttpGet("{resultName}")]
     public async Task<IActionResult> GetCompletedImage(string resultName, CancellationToken cancellationToken) {
-        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-
-        if (string.IsNullOrEmpty(userId))
-            return Unauthorized("User ID claim is missing");
+        _httpContextService.CheckUserIdClaim();
 
         var theOne = await _context.JobTable
             .AsNoTracking()
@@ -71,10 +76,7 @@ public class ImageController : ControllerBase {
 
     [HttpPost("resize")]
     public async Task<IActionResult> ResizeImage(string imageId, int width, int height, CancellationToken cancellationToken) {
-        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-
-        if (string.IsNullOrEmpty(userId))
-            return Unauthorized("User ID claim is missing");
+        var userId = _httpContextService.GetCurrentUserIdAsString();
 
         if (width < 0 || height < 0)
             return BadRequest("Width or height must be greater than 0");
@@ -101,10 +103,7 @@ public class ImageController : ControllerBase {
     
     [HttpPost("crop")]
     public async Task<IActionResult> CropImage(string imageId, int x, int y, int width, int height, CancellationToken cancellationToken) {
-        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-
-        if (string.IsNullOrEmpty(userId))
-            return Unauthorized("User ID claim is missing");
+        var userId = _httpContextService.GetCurrentUserIdAsString();
 
         if (x < 0 || y < 0 || width < 0 || height < 0)
             return BadRequest("Start point, width or height must be greater than 0");
@@ -133,10 +132,7 @@ public class ImageController : ControllerBase {
     
     [HttpPost("rotate")]
     public async Task<IActionResult> RotateImage(string imageId, float degree, CancellationToken cancellationToken) {
-        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-
-        if (string.IsNullOrEmpty(userId))
-            return Unauthorized("User ID claim is missing");
+        var userId = _httpContextService.GetCurrentUserIdAsString();
 
         string resultName = $"rotate-{degree}-{imageId}";
 
@@ -159,10 +155,7 @@ public class ImageController : ControllerBase {
 
     [HttpPost("watermark")]
     public async Task<IActionResult> AddWatermark(string imageId, string watermarkText, int x, int y, float size, CancellationToken cancellationToken) {
-        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-
-        if (string.IsNullOrEmpty(userId))
-            return Unauthorized("User ID claim is missing");
+        var userId = _httpContextService.GetCurrentUserIdAsString();
 
         if (x < 0 || y < 0)
             return BadRequest("Start point must be greater than 0");
@@ -191,10 +184,7 @@ public class ImageController : ControllerBase {
 
     [HttpPost("flip")]
     public async Task<IActionResult> FlipImage(string imageId, FlipMode flipMode, CancellationToken cancellationToken) {
-        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-
-        if (string.IsNullOrEmpty(userId))
-            return Unauthorized("User ID claim is missing");
+        var userId = _httpContextService.GetCurrentUserIdAsString();
 
         string resultName = $"flip-{flipMode}-{imageId}";
 
@@ -217,10 +207,7 @@ public class ImageController : ControllerBase {
 
     [HttpPost("mirror")]
     public async Task<IActionResult> MirrorImage(string imageId, CancellationToken cancellationToken) {
-        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-
-        if (string.IsNullOrEmpty(userId))
-            return Unauthorized("User ID claim is missing");
+        var userId = _httpContextService.GetCurrentUserIdAsString();
 
         string resultName = $"mirror-{imageId}";
 
@@ -242,10 +229,7 @@ public class ImageController : ControllerBase {
 
     [HttpPost("compress")]
     public async Task<IActionResult> CompressImage(string imageId, CancellationToken cancellationToken, int quality = 75) {
-        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-
-        if (string.IsNullOrEmpty(userId))
-            return Unauthorized("User ID claim is missing");
+        var userId = _httpContextService.GetCurrentUserIdAsString();
 
         if (quality < 1 || quality > 100)
             return BadRequest("Quality should be between 1 and 100");
@@ -271,10 +255,7 @@ public class ImageController : ControllerBase {
 
     [HttpPost("changeFormat")]
     public async Task<IActionResult> ChangeFormat(string imageId, TargetFormat targetFormat, CancellationToken cancellationToken, int quality = 75) {
-        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-
-        if (string.IsNullOrEmpty(userId))
-            return Unauthorized("User ID claim is missing");
+        var userId = _httpContextService.GetCurrentUserIdAsString();
 
         if (quality < 1 || quality > 100)
             return BadRequest("Quality should be between 1 and 100");
@@ -302,10 +283,7 @@ public class ImageController : ControllerBase {
 
     [HttpPost("filter")]
     public async Task<IActionResult> ApplyFilter(string imageId, ImageFilter imageFilter, CancellationToken cancellationToken) {
-        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-
-        if (string.IsNullOrEmpty(userId))
-            return Unauthorized("User ID claim is missing");
+        var userId = _httpContextService.GetCurrentUserIdAsString();
 
         string resultName = $"filter-{imageFilter}-{imageId}";
 
